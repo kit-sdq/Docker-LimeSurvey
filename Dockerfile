@@ -1,10 +1,12 @@
 # Acquisition of resources
 FROM alpine:latest as builder
 WORKDIR /tmp/work
-RUN VERSION=3.27.12+210816 && \
-    wget -O limesurvey.zip https://download.limesurvey.org/lts-releases/limesurvey$VERSION.zip && \
-    unzip limesurvey.zip
-
+RUN VERSION=3.27.13+210823 && \
+    wget -O limesurvey.zip https://github.com/LimeSurvey/LimeSurvey/archive/refs/tags/$VERSION.zip || true && \
+    wget -O limesurvey.zip https://download.limesurvey.org/lts-releases/limesurvey$VERSION.zip || true && \
+    mkdir extracted && \
+    unzip -d extracted limesurvey.zip && \
+    mv extracted/* limesurvey
 
 # Actual image definition
 FROM php:7-apache
