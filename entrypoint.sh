@@ -7,11 +7,26 @@ make_writable() {
 }
 
 # Initialize config volume if empty
-if [ ! -f /var/www/html/application/config/index.html ]; then
-    echo "Config volume looks empty. Initializing with defaults..."
-    cp -r /defaults/application_config/* /var/www/html/application/config/
-    make_writable  /var/www/html/application/config
+echo "Initializing config directory"
+if [ -f /var/www/html/application/config/config.php ]; then
+    echo "Backup of config.php"
+    cp /var/www/html/application/config/config.php /tmp/config.php
 fi
+if [ -f /var/www/html/application/config/security.php ]; then
+    echo "Backup of security.php"
+    cp /var/www/html/application/config/security.php /tmp/security.php
+fi
+rm -r /var/www/html/application/config/*
+cp -r /defaults/application_config/* /var/www/html/application/config/
+if [ -f /tmp/config.php ]; then
+    echo "Restoring config.php"
+    mv -f /tmp/config.php /var/www/html/application/config/config.php
+fi
+if [ -f /tmp/security.php ]; then
+    echo "Restoring security.php"
+    mv -f /tmp/security.php /var/www/html/application/config/security.php
+fi
+make_writable  /var/www/html/application/config
 
 # Initialize upload volume if empty
 if [ ! -f /var/www/html/upload/readme.txt ]; then
