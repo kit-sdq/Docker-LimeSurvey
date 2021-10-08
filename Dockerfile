@@ -1,7 +1,7 @@
 # Acquisition of resources
 FROM alpine:latest as builder
 WORKDIR /tmp/work
-RUN VERSION=3.27.13+210823 && \
+RUN VERSION=3.27.19+210928 && \
     wget -O limesurvey.zip https://github.com/LimeSurvey/LimeSurvey/archive/refs/tags/$VERSION.zip || true && \
     wget -O limesurvey.zip https://download.limesurvey.org/lts-releases/limesurvey$VERSION.zip || true && \
     mkdir extracted && \
